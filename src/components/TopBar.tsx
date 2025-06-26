@@ -91,9 +91,9 @@ export const TopBar: React.FC = () => {
           </div>
           
           {/* Settings */}
-          <button className="p-2 rounded-xl bg-white/20 dark:bg-slate-700/50 hover:bg-white/30 dark:hover:bg-slate-600/50 transition-all duration-200 group">
+          {/* <button className="p-2 rounded-xl bg-white/20 dark:bg-slate-700/50 hover:bg-white/30 dark:hover:bg-slate-600/50 transition-all duration-200 group">
             <Settings className="w-5 h-5 text-slate-600 dark:text-slate-300 group-hover:text-blue-500 transition-colors duration-200" />
-          </button>
+          </button> */}
           
           {/* Account Dropdown */}
           <DropdownMenu>

@@ -40,7 +40,7 @@ const communicationSubModules = [
 
 const bottomModules = [
   { id: 'profile', label: 'Profile', icon: User, path: '/profile' },
-  { id: 'settings', label: 'Settings', icon: Settings, path: '/settings' },
+  // { id: 'settings', label: 'Settings', icon: Settings, path: '/settings' },
   { id: 'help', label: 'Help & Support', icon: HelpCircle, path: '/help' },
 ];
 

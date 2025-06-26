@@ -4,7 +4,8 @@ import { Layout } from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Search, Filter, DollarSign, Calendar, User, TrendingUp } from 'lucide-react';
+import { Plus, Search, Filter, DollarSign, Calendar, User, TrendingUp, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const opportunities = [
   {
@@ -42,8 +43,84 @@ const opportunities = [
   }
 ];
 
+const OpportunityModal = ({ open, onClose, data, setData }: any) => {
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center px-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <motion.div
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.95, opacity: 0 }}
+            transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+            className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-2xl w-full max-w-xl relative border border-slate-200 dark:border-slate-700 space-y-4"
+          >
+            {/* Close Button */}
+            <button
+              onClick={onClose}
+              className="absolute top-4 right-4 text-slate-400 hover:text-red-500 transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* Modal Header */}
+            <div className="mb-2">
+              <h2 className="text-2xl font-bold text-slate-800 dark:text-white">Create New Opportunity</h2>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Fill out the details below.</p>
+            </div>
+
+            {/* Form Fields */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Input placeholder="Title" value={data.title} onChange={e => setData(prev => ({ ...prev, title: e.target.value }))} />
+              <Input placeholder="Company" value={data.company} onChange={e => setData(prev => ({ ...prev, company: e.target.value }))} />
+              <Input placeholder="Value" value={data.value} onChange={e => setData(prev => ({ ...prev, value: e.target.value }))} />
+              <Input placeholder="Stage" value={data.stage} onChange={e => setData(prev => ({ ...prev, stage: e.target.value }))} />
+              <Input placeholder="Probability" value={data.probability} onChange={e => setData(prev => ({ ...prev, probability: e.target.value }))} />
+              <Input placeholder="Close Date" type="date" value={data.closeDate} onChange={e => setData(prev => ({ ...prev, closeDate: e.target.value }))} />
+              <Input placeholder="Owner" value={data.owner} onChange={e => setData(prev => ({ ...prev, owner: e.target.value }))} />
+              <Input placeholder="Status" value={data.status} onChange={e => setData(prev => ({ ...prev, status: e.target.value }))} />
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex justify-end pt-4 space-x-2">
+              <Button variant="outline" onClick={onClose}>
+                Cancel
+              </Button>
+              <Button
+                onClick={() => {
+                  console.log(data);
+                  onClose();
+                }}
+                className="bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 shadow-lg"
+              >
+                Save Opportunity
+              </Button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
 const Opportunities = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    title: '',
+    company: '',
+    value: '',
+    stage: '',
+    probability: '',
+    closeDate: '',
+    owner: '',
+    status: 'cold'
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -72,10 +149,26 @@ const Opportunities = () => {
             <h1 className="text-3xl font-bold text-slate-800 dark:text-white mb-2">Opportunities</h1>
             <p className="text-slate-600 dark:text-slate-400">Manage your sales pipeline and track deals</p>
           </div>
-          <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-200">
+          <Button
+            onClick={() => {
+              setFormData({
+                title: '',
+                company: '',
+                value: '',
+                stage: '',
+                probability: '',
+                closeDate: '',
+                owner: '',
+                status: 'cold'
+              });
+              setIsModalOpen(true);
+            }}
+            className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
+          >
             <Plus className="w-4 h-4 mr-2" />
             New Opportunity
           </Button>
+
         </div>
 
         {/* Quick Stats */}
@@ -143,6 +236,13 @@ const Opportunities = () => {
           </Button>
         </div>
 
+        <OpportunityModal
+          open={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          data={formData}
+          setData={setFormData}
+        />
+
         {/* Opportunities Table */}
         <div className="bg-white/20 dark:bg-slate-800/20 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-slate-700/30 overflow-hidden">
           <div className="overflow-x-auto">
@@ -175,7 +275,7 @@ const Opportunities = () => {
                     <td className="p-4">
                       <div className="flex items-center space-x-2">
                         <div className="w-12 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                          <div 
+                          <div
                             className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full"
                             style={{ width: opp.probability }}
                           ></div>

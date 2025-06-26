@@ -5,7 +5,7 @@ import { Settings as SettingsIcon, User, Bell, Shield, Palette, Database, Mail, 
 import { useTheme } from '@/contexts/ThemeContext';
 
 const Settings = () => {
-  const { isDark, toggleTheme } = useTheme();
+  // const { isDark, toggleTheme } = useTheme();
   const [activeTab, setActiveTab] = useState('general');
 
   const tabs = [
@@ -93,7 +93,7 @@ const Settings = () => {
                       <h3 className="font-medium text-slate-800 dark:text-white">Dark Mode</h3>
                       <p className="text-sm text-slate-600 dark:text-slate-400">Toggle between light and dark themes</p>
                     </div>
-                    <button
+                    {/* <button
                       onClick={toggleTheme}
                       className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                         isDark ? 'bg-blue-600' : 'bg-gray-200'
@@ -104,7 +104,7 @@ const Settings = () => {
                           isDark ? 'translate-x-6' : 'translate-x-1'
                         }`}
                       />
-                    </button>
+                    </button> */}
                   </div>
                 </div>
               )}
