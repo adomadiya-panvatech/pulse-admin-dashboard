@@ -11,6 +11,8 @@ import Accounts from "./pages/Accounts";
 import Contacts from "./pages/Contacts";
 import Leads from "./pages/Leads";
 import Communications from "./pages/Communications";
+import Settings from "./pages/Settings";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +31,8 @@ const App = () => (
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/leads" element={<Leads />} />
           <Route path="/communications" element={<Communications />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

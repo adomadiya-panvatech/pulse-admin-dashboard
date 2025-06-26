@@ -14,7 +14,8 @@ import {
   MessageCircle,
   Home,
   Settings,
-  HelpCircle
+  HelpCircle,
+  User
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -38,6 +39,7 @@ const communicationSubModules = [
 ];
 
 const bottomModules = [
+  { id: 'profile', label: 'Profile', icon: User, path: '/profile' },
   { id: 'settings', label: 'Settings', icon: Settings, path: '/settings' },
   { id: 'help', label: 'Help & Support', icon: HelpCircle, path: '/help' },
 ];
@@ -52,7 +54,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeModule, setActiveModule 
   };
 
   const getCurrentActiveModule = () => {
-    for (const module of modules) {
+    for (const module of [...modules, ...bottomModules]) {
       if (location.pathname === module.path) {
         return module.id;
       }
@@ -145,11 +147,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeModule, setActiveModule 
         <div className="space-y-1">
           {bottomModules.map((module) => {
             const Icon = module.icon;
+            const isActive = currentActiveModule === module.id;
             return (
               <button
                 key={module.id}
-                onClick={() => console.log(`Navigate to ${module.label}`)}
-                className="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-white/20 dark:hover:bg-slate-700/50 hover:text-slate-800 dark:hover:text-white transition-all duration-200 group text-left"
+                onClick={() => handleModuleClick(module)}
+                className={cn(
+                  "w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-200 group text-left",
+                  isActive 
+                    ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg" 
+                    : "text-slate-600 dark:text-slate-300 hover:bg-white/20 dark:hover:bg-slate-700/50 hover:text-slate-800 dark:hover:text-white"
+                )}
               >
                 <Icon className="w-5 h-5 group-hover:scale-105 transition-transform duration-200" />
                 <span className="font-medium text-sm">{module.label}</span>

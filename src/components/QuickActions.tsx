@@ -3,8 +3,12 @@ import React from 'react';
 import { Plus, UserPlus, TrendingUp, Calendar, MessageSquare } from 'lucide-react';
 
 interface QuickActionsProps {
-  onAddContact: () => void;
-  onAddLead: () => void;
+  onAddContact?: () => void;
+  onAddLead?: () => void;
+  onOpenOpportunityModal?: () => void;
+  onOpenAccountModal?: () => void;
+  onOpenSMSModal?: () => void;
+  onOpenEmailModal?: () => void;
 }
 
 const actions = [
@@ -42,14 +46,25 @@ const actions = [
   },
 ];
 
-export const QuickActions: React.FC<QuickActionsProps> = ({ onAddContact, onAddLead }) => {
+export const QuickActions: React.FC<QuickActionsProps> = ({ 
+  onAddContact, 
+  onAddLead,
+  onOpenOpportunityModal,
+  onOpenAccountModal,
+  onOpenSMSModal,
+  onOpenEmailModal
+}) => {
   const handleAction = (action: string) => {
     switch (action) {
       case 'contact':
-        onAddContact();
+        if (onAddContact) {
+          onAddContact();
+        }
         break;
       case 'lead':
-        onAddLead();
+        if (onAddLead) {
+          onAddLead();
+        }
         break;
       case 'meeting':
         // Create a meeting form or modal
@@ -64,13 +79,11 @@ export const QuickActions: React.FC<QuickActionsProps> = ({ onAddContact, onAddL
         break;
       case 'message':
         // Create a message form or modal
-        const recipient = prompt('Enter recipient email:');
-        if (recipient) {
-          const message = prompt('Enter your message:');
-          if (message) {
-            console.log('Message sent:', { to: recipient, message });
-            alert(`Message sent to ${recipient}`);
-          }
+        const messageType = prompt('Select message type (sms/email):');
+        if (messageType === 'sms' && onOpenSMSModal) {
+          onOpenSMSModal();
+        } else if (messageType === 'email' && onOpenEmailModal) {
+          onOpenEmailModal();
         }
         break;
     }
