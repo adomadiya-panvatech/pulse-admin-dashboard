@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { 
   BarChart3, 
@@ -19,12 +20,12 @@ interface SidebarProps {
 }
 
 const modules = [
-  { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
-  { id: 'opportunities', label: 'Opportunities', icon: TrendingUp },
-  { id: 'accounts', label: 'Accounts', icon: Building2 },
-  { id: 'contacts', label: 'Contacts', icon: Users },
-  { id: 'leads', label: 'Leads', icon: UserCheck },
-  { id: 'communications', label: 'Communications', icon: MessageSquare },
+  { id: 'dashboard', label: 'Dashboard', icon: BarChart3, path: '/' },
+  { id: 'opportunities', label: 'Opportunities', icon: TrendingUp, path: '/opportunities' },
+  { id: 'accounts', label: 'Accounts', icon: Building2, path: '/accounts' },
+  { id: 'contacts', label: 'Contacts', icon: Users, path: '/contacts' },
+  { id: 'leads', label: 'Leads', icon: UserCheck, path: '/leads' },
+  { id: 'communications', label: 'Communications', icon: MessageSquare, path: '/communications' },
 ];
 
 const communicationSubModules = [
@@ -34,6 +35,25 @@ const communicationSubModules = [
 ];
 
 export const Sidebar: React.FC<SidebarProps> = ({ activeModule, setActiveModule }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleModuleClick = (module: { id: string; path: string }) => {
+    setActiveModule(module.id);
+    navigate(module.path);
+  };
+
+  const getCurrentActiveModule = () => {
+    for (const module of modules) {
+      if (location.pathname === module.path) {
+        return module.id;
+      }
+    }
+    return 'dashboard';
+  };
+
+  const currentActiveModule = getCurrentActiveModule();
+
   return (
     <div className="w-64 h-screen bg-white/10 dark:bg-slate-800/50 backdrop-blur-xl border-r border-white/20 dark:border-slate-700/50 shadow-xl">
       <div className="p-6">
@@ -50,12 +70,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeModule, setActiveModule 
         <nav className="space-y-2">
           {modules.map((module) => {
             const Icon = module.icon;
-            const isActive = activeModule === module.id;
+            const isActive = currentActiveModule === module.id;
             
             return (
               <div key={module.id}>
                 <button
-                  onClick={() => setActiveModule(module.id)}
+                  onClick={() => handleModuleClick(module)}
                   className={cn(
                     "w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 group",
                     isActive 
@@ -71,7 +91,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeModule, setActiveModule 
                 </button>
                 
                 {/* Communications Sub-modules */}
-                {module.id === 'communications' && activeModule === 'communications' && (
+                {module.id === 'communications' && currentActiveModule === 'communications' && (
                   <div className="ml-6 mt-2 space-y-1 animate-fade-in">
                     {communicationSubModules.map((subModule) => {
                       const SubIcon = subModule.icon;
