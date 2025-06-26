@@ -1,18 +1,34 @@
 
 import React, { useState } from 'react';
-import { Bell, Search, Moon, Sun, Settings } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Bell, Search, Moon, Sun, Settings, User, LogOut, ChevronDown } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/utils';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export const TopBar: React.FC = () => {
   const { isDark, toggleTheme } = useTheme();
   const [showNotifications, setShowNotifications] = useState(false);
+  const navigate = useNavigate();
 
   const notifications = [
     { id: 1, message: "New lead from website contact form", time: "2 min ago", unread: true },
     { id: 2, message: "Deal 'Acme Corp' moved to negotiation", time: "15 min ago", unread: true },
     { id: 3, message: "Follow-up call scheduled for tomorrow", time: "1 hour ago", unread: false },
   ];
+
+  const handleLogout = () => {
+    // Clear any stored user data
+    localStorage.removeItem('user');
+    navigate('/login');
+  };
 
   return (
     <div className="bg-white/20 dark:bg-slate-800/20 backdrop-blur-xl border-b border-white/20 dark:border-slate-700/30 px-6 py-4">
@@ -79,10 +95,43 @@ export const TopBar: React.FC = () => {
             <Settings className="w-5 h-5 text-slate-600 dark:text-slate-300 group-hover:text-blue-500 transition-colors duration-200" />
           </button>
           
-          {/* User Avatar */}
-          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg">
-            JD
-          </div>
+          {/* Account Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="flex items-center space-x-2 p-2 rounded-xl bg-white/20 dark:bg-slate-700/50 hover:bg-white/30 dark:hover:bg-slate-600/50 transition-all duration-200 group">
+                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg">
+                  JD
+                </div>
+                <span className="text-slate-700 dark:text-slate-300 font-medium hidden sm:block">John Doe</span>
+                <ChevronDown className="w-4 h-4 text-slate-500 group-hover:text-slate-700 dark:group-hover:text-slate-300 transition-colors duration-200" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border border-white/20 dark:border-slate-700/50" align="end">
+              <DropdownMenuLabel className="text-slate-700 dark:text-slate-300">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium">John Doe</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">john.doe@company.com</p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator className="bg-white/20 dark:bg-slate-700/50" />
+              <DropdownMenuItem className="hover:bg-white/20 dark:hover:bg-slate-700/50 text-slate-700 dark:text-slate-300">
+                <User className="mr-2 h-4 w-4" />
+                <span>Profile</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="hover:bg-white/20 dark:hover:bg-slate-700/50 text-slate-700 dark:text-slate-300">
+                <Settings className="mr-2 h-4 w-4" />
+                <span>Settings</span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator className="bg-white/20 dark:bg-slate-700/50" />
+              <DropdownMenuItem 
+                onClick={handleLogout}
+                className="hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400 focus:bg-red-50 dark:focus:bg-red-900/20"
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Logout</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </div>

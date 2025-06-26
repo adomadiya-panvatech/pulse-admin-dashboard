@@ -52,10 +52,26 @@ export const QuickActions: React.FC<QuickActionsProps> = ({ onAddContact, onAddL
         onAddLead();
         break;
       case 'meeting':
-        console.log('Schedule meeting clicked');
+        // Create a meeting form or modal
+        const meetingTitle = prompt('Enter meeting title:');
+        if (meetingTitle) {
+          const meetingDate = prompt('Enter meeting date (YYYY-MM-DD):');
+          if (meetingDate) {
+            console.log('Meeting scheduled:', { title: meetingTitle, date: meetingDate });
+            alert(`Meeting "${meetingTitle}" scheduled for ${meetingDate}`);
+          }
+        }
         break;
       case 'message':
-        console.log('Send message clicked');
+        // Create a message form or modal
+        const recipient = prompt('Enter recipient email:');
+        if (recipient) {
+          const message = prompt('Enter your message:');
+          if (message) {
+            console.log('Message sent:', { to: recipient, message });
+            alert(`Message sent to ${recipient}`);
+          }
+        }
         break;
     }
   };
@@ -74,7 +90,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({ onAddContact, onAddL
             <button
               key={action.id}
               onClick={() => handleAction(action.action)}
-              className="w-full flex items-center space-x-4 p-4 rounded-xl hover:bg-white/10 dark:hover:bg-slate-700/20 transition-all duration-200 group animate-fade-in hover:scale-105"
+              className="w-full flex items-center space-x-4 p-4 rounded-xl hover:bg-white/10 dark:hover:bg-slate-700/20 transition-all duration-200 group animate-fade-in hover:scale-105 active:scale-95"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <div className={`w-10 h-10 bg-gradient-to-br ${action.color} rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-200`}>
@@ -90,7 +106,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({ onAddContact, onAddL
                 </p>
               </div>
               
-              <Plus className="w-4 h-4 text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 transition-colors duration-200" />
+              <Plus className="w-4 h-4 text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 transition-colors duration-200 group-hover:rotate-90" />
             </button>
           );
         })}

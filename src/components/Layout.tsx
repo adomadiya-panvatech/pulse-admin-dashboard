@@ -16,6 +16,12 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
 
+  // Create a context or props to pass modal handlers down
+  const childrenWithProps = React.cloneElement(children as React.ReactElement, {
+    onOpenContactModal: () => setIsContactModalOpen(true),
+    onOpenLeadModal: () => setIsLeadModalOpen(true),
+  });
+
   return (
     <ThemeProvider>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 transition-all duration-500">
@@ -24,7 +30,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           
           <main className="flex-1 min-h-screen">
             <TopBar />
-            {children}
+            {childrenWithProps}
           </main>
         </div>
         
